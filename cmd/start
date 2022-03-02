@@ -1,0 +1,4 @@
+#!/bin/bash
+set -eu
+
+npx elm-go src/main.elm --start-page=200.html --dir=docs -- --output=docs/elm.js --debug

@@ -1,0 +1,4 @@
+#!/bin/bash
+set -eu
+
+npx surge ./build elm-map.surge.sh

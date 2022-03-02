@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eu
+
+printf "\nBuilding...\n\n"
+
+rm -rf build
+
+mkdir build
+
+cp -r docs/*    build/
+cp docs/200.html build/debug.html
+npx replace 'elm.js' 'elm-debug.js' build/debug.html -m -i 
+
+npx elm make src/Main.elm --output=build/elm.js       --optimize
+npx elm make src/Main.elm --output=build/elm-debug.js --debug
+npx terser build/elm.js       --no-rename --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters=true,keep_fargs=false,unsafe_comps=true,unsafe=true,passes=2' --mangle --output=build/elm.js 
+npx terser build/elm-debug.js --no-rename --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters=true,keep_fargs=false,unsafe_comps=true,unsafe=true,passes=2' --mangle --output=build/elm-debug.js 
+
+printf "\nFiles to be released in production are available in ./build/\n\n"
